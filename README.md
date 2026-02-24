@@ -35,7 +35,6 @@ If none of these methods are available, the skill will generate SQL with instruc
 - **Performance Tuning**: Includes appropriate indexes, partitioning, and query patterns
 - **Multi-Region Support**: Handles global distribution patterns when needed
 - **Time Travel Queries**: Supports AS OF SYSTEM TIME for historical data access
-- **Vector Search**: Includes support for AI/ML embeddings with VECTOR type
 
 ## Quick Start
 
