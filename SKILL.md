@@ -4,7 +4,7 @@ description: Convert natural language questions into CockroachDB-compliant SQL q
 compatibility: Can work with or without connection to a database. Without connection it generates the SQL and gives instruction for connection.With connection it requires appropriate privilege on target database and tables (SELECT, INSERT, UPDATE, DELETE, or admin).
 metadata:
   author: cockroachdb
-  Trigger: `/cockroachdb-sql`, `/crdb-sql`, or when user asks to "convert to CockroachDB SQL" or "generate CockroachDB query"
+  Trigger: "/cockroachdb-sql", "/crdb-sql", or when user asks to "convert to CockroachDB SQL" or "generate CockroachDB query"
   version: "1.0"
 ---
 
