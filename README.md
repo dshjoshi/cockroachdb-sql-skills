@@ -6,6 +6,21 @@ A specialized skill for converting natural language queries and requirements int
 
 This skill transforms natural language descriptions into CockroachDB-compliant SQL queries and can optionally execute them against a connected database. It ensures all generated code follows CockroachDB's distributed architecture best practices, automatically applies CockroachDB-specific optimizations, and avoids common pitfalls.
 
+## Installation
+
+1. Clone or download this repository in a directory 
+```
+git clone https://github.com/dshjoshi/cockroachdb-sql-skills.git
+```
+2. Create ~/.claude/skills/cockroachdb-sql directory
+```
+mkdir ~/.claude/skills/cockroachdb-sql
+```
+3. Copy the content of the directory where report is cloned or downloaded to  ./claude/skills/cockroachdb-sql
+```
+cp <skill-download-location>/cockroachdb-sql/* ~/.claude/skills/cockroachdb-sql/
+```
+
 ## Database Connection & Execution
 
 The skill supports three methods to connect and execute queries (in priority order):
