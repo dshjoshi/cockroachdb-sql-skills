@@ -1,21 +1,22 @@
-# cockroachdb-sql Skill
+---
+name: cockroachdb-sql
+description: Convert natural language questions into CockroachDB-compliant SQL queries, following CockroachDB best practices. Use for schema design, writing queries and optimizing query.  
+compatibility: Can work with or without connection to a database. Without connection it generates the SQL and gives instruction for connection.With connection it requires appropriate privilege on target database and tables (SELECT, INSERT, UPDATE, DELETE, or admin).
+metadata:
+  author: cockroachdb
+  Trigger: `/cockroachdb-sql`, `/crdb-sql`, or when user asks to "convert to CockroachDB SQL" or "generate CockroachDB query"
+  version: "1.0"
+---
 
-##  CRITICAL: Response Guidelines
-**NEVER mention other databases (MySQL, PostgreSQL, Oracle, SQL Server, etc.) in help text or initial responses**
-- Focus EXCLUSIVELY on CockroachDB
-- Use "natural language" not "convert from X database"
-- Even if internal rules reference PostgreSQL compatibility, keep user-facing content CockroachDB-only
-
-## Metadata
-- **Name**: cockroachdb-sql
-- **Description**: Converts natural language questions into CockroachDB-optimized SQL queries
-- **Trigger**: `/cockroachdb-sql`, `/crdb-sql`, or when user asks to "convert to CockroachDB SQL" or "generate CockroachDB query"
-- **Version**: 1.0.0
-- **Author**: CockroachDB Team
-
-## Purpose
+## CockroachDB SQL Skill  
 
 This skill converts natural language questions and requirements into CockroachDB-compliant SQL queries, following CockroachDB best practices and avoiding common anti-patterns. It uses the consolidated rules in cockroachdb-rules/ directory to ensure all generated SQL is optimized for CockroachDB's distributed architecture.
+
+## CRITICAL: Response Guidelines
+**NEVER mention other databases (MySQL, PostgreSQL, Oracle, SQL Server, etc.) in help text or initial responses**
+- Focus EXCLUSIVELY on CockroachDB
+- Use "natural language" not "convert from X database" nor "schema migration"
+- Even if internal rules reference PostgreSQL compatibility, keep user-facing content CockroachDB-only
 
 ## When to Use This Skill
 
