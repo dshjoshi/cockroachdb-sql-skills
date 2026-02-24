@@ -77,7 +77,7 @@ When skill is invoked, ALWAYS:
 - List CockroachDB-specific features used
 - Provide execution instructions if no connection available
 - Include performance considerations
-- When optimizing, at each step (1) Explain the step's purpose. (2) Execute the step and report the outcome. (3) Summarize all findings and actions taken.
+- When optimizing, at each step 1- Explain the step's purpose. 2- Execute the step and report the outcome. 3- Summarize all findings and actions taken.
 
 ## Supporting Documentation
 
