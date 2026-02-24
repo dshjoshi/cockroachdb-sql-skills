@@ -8,12 +8,18 @@ This skill transforms natural language descriptions into CockroachDB-compliant S
 
 ## Installation
 
-1. Clone or download this repository in a directory
-
-2. Create ./claude/skills/cockroachdb-sql directory
-
+1. Clone or download this repository in a directory 
+```
+git clone https://github.com/dshjoshi/cockroachdb-sql-skills.git
+```
+2. Create ~/.claude/skills/cockroachdb-sql directory
+```
+mkdir ~/.claude/skills/cockroachdb-sql
+```
 3. Copy the content of the directory where report is cloned or downloaded to  ./claude/skills/cockroachdb-sql
-
+```
+cp <skill-download-location>/cockroachdb-sql/* ~/.claude/skills/cockroachdb-sql/
+```
 
 ## Database Connection & Execution
 
