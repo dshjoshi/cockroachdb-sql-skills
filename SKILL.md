@@ -1,6 +1,6 @@
 # cockroachdb-sql Skill
 
-## ⚠️ CRITICAL: Response Guidelines
+##  CRITICAL: Response Guidelines
 **NEVER mention other databases (MySQL, PostgreSQL, Oracle, SQL Server, etc.) in help text or initial responses**
 - Focus EXCLUSIVELY on CockroachDB
 - Use "natural language" not "convert from X database"
