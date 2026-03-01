@@ -5,15 +5,12 @@ These principles apply to ALL CockroachDB SQL operations and override everything
 
 ### Essential Requirements
 1. **Always include PRIMARY KEY** in table definitions
-2. **Use TIMESTAMPTZ** for all timestamps
-3. **Use STRING** instead of TEXT
-4. **Use JSONB** instead of JSON
-5. **Prefer UUID** for primary keys in distributed scenarios
-6. **Use UPSERT** for blind writes, INSERT ON CONFLICT for conditional logic
-7. **Add STORING** to indexes for covering queries
-8. **Use AS OF SYSTEM TIME** for historical queries
-9. **Use RETURNING NOTHING** for write-only operations when results aren't needed
-10. **Consider multi-region** patterns for global applications
+2. **Prefer UUID** for primary keys in distributed scenarios
+3. **Use UPSERT** for blind writes, INSERT ON CONFLICT for conditional logic
+4. **Add STORING** to indexes for covering queries
+5. **Use AS OF SYSTEM TIME** for historical queries
+6. **Use RETURNING NOTHING** for write-only operations when results aren't needed
+7. **Consider multi-region** patterns for global applications
 
 ## Core Compatibility
 - CockroachDB uses PostgreSQL wire protocol and syntax as its base
@@ -24,10 +21,8 @@ These principles apply to ALL CockroachDB SQL operations and override everything
 
 ## Type System Philosophy
 - Types are normalized to their canonical forms
-- STRING is preferred over TEXT
 - INT8 (64-bit) is the default integer type
 - JSONB is the only JSON storage format
-- TIMESTAMPTZ is preferred for all timestamps
 
 ## Distribution Best Practices
 - Design for distributed execution from the start

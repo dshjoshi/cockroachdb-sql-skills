@@ -97,7 +97,6 @@ FROM user_sessions;
 
 ### JSON Operators
 ```sql
--- Always use JSONB, never JSON
 data JSONB NOT NULL DEFAULT '{}'::JSONB
 
 -- Extract value (as JSON)

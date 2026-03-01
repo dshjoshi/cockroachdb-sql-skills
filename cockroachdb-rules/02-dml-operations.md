@@ -17,7 +17,7 @@ INSERT INTO users (email, name) VALUES
 INSERT INTO users (email) VALUES ('new@example.com')
   RETURNING id, created_at;
 
--- Insert with RETURNING NOTHING (performance optimization)
+-- Insert with RETURNING NOTHING
 INSERT INTO logs (data) VALUES ('log entry') RETURNING NOTHING;
 
 -- Insert from SELECT
@@ -29,7 +29,7 @@ INSERT INTO archived_orders
 
 ### Native UPSERT vs INSERT ON CONFLICT
 ```sql
--- Native UPSERT (most efficient for blind writes)
+-- Native UPSERT
 UPSERT INTO inventory (product_id, quantity) VALUES (1, 100);
 
 -- INSERT ON CONFLICT for conditional logic
@@ -249,11 +249,6 @@ FETCH 100 FROM process_cursor;
 
 ## Performance Tips
 
-1. **Use RETURNING NOTHING** when you don't need results
-2. **Prefer UPSERT** for blind writes over INSERT ON CONFLICT
-3. **Batch operations** to reduce round trips
-4. **Use prepared statements** for repeated queries
-5. **Add LIMIT** to UPDATE/DELETE for large tables
-6. **Use transactions** for related operations
-7. **Consider COPY** for bulk imports/exports
-8. **Use appropriate isolation levels** (SERIALIZABLE by default)
+1. **Add LIMIT** to UPDATE/DELETE for large tables
+2. **Use transactions** for related operations
+3. **Consider COPY** for bulk imports/exports

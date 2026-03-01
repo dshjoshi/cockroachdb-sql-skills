@@ -64,41 +64,6 @@ ALTER TABLE large_table CONFIGURE ZONE USING
 
 ### Query Optimization Techniques
 
-#### Use RETURNING NOTHING
-```sql
--- When you don't need results
-INSERT INTO logs (data) VALUES ('entry') RETURNING NOTHING;
-UPDATE large_table SET processed = true RETURNING NOTHING;
-DELETE FROM old_data WHERE date < '2023-01-01' RETURNING NOTHING;
-```
-
-#### Batch Operations
-```sql
--- Batch inserts
-INSERT INTO items (id, name) VALUES
-  (gen_random_uuid(), 'Item 1'),
-  (gen_random_uuid(), 'Item 2'),
-  -- ... up to 1000 rows
-  (gen_random_uuid(), 'Item 1000');
-
--- Batch updates with LIMIT
-UPDATE events
-SET processed = true
-WHERE processed = false
-ORDER BY created_at
-LIMIT 1000;
-```
-
-#### Covering Indexes
-```sql
--- Add STORING clause for covering queries
-CREATE INDEX idx_orders_user ON orders (user_id)
-STORING (total, status, created_at);
-
--- Query uses only index (no table lookup)
-SELECT user_id, total, status FROM orders WHERE user_id = $1;
-```
-
 #### Partial Indexes
 ```sql
 -- Index only active records
@@ -117,18 +82,6 @@ WHERE created_at > '2024-01-01';
 -- AUTO_INCREMENT (not supported)
 id INT AUTO_INCREMENT  -- ❌ Will fail
 
--- CREATE TABLE without PRIMARY KEY
-CREATE TABLE bad (data STRING);  -- ❌ Creates hidden rowid
-
--- TEXT type (use STRING)
-description TEXT  -- ❌ Use STRING instead
-
--- JSON type (use JSONB)
-data JSON  -- ❌ Always use JSONB
-
--- TIMESTAMP without timezone
-created_at TIMESTAMP  -- ❌ Use TIMESTAMPTZ
-
 -- TRUNCATE with CASCADE on production
 TRUNCATE TABLE users CASCADE;  -- ❌ Dangerous
 
@@ -138,33 +91,12 @@ DELETE FROM table;  -- ❌ Add WHERE true if intentional
 -- SELECT * in production code
 SELECT * FROM large_table;  -- ❌ Specify columns
 
--- Sequential IDs for distribution
-id SERIAL PRIMARY KEY  -- ❌ Creates hotspots
-
 -- Large OFFSET pagination
 SELECT * FROM table LIMIT 20 OFFSET 10000;  -- ❌ Inefficient
 ```
 
 ### DO Use These Instead
 ```sql
--- UUID primary keys
-id UUID PRIMARY KEY DEFAULT gen_random_uuid()  -- ✅
-
--- Explicit PRIMARY KEY
-CREATE TABLE good (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  data STRING
-);  -- ✅
-
--- STRING type
-description STRING  -- ✅
-
--- JSONB type
-data JSONB  -- ✅
-
--- Timezone-aware timestamps
-created_at TIMESTAMPTZ DEFAULT now()  -- ✅
-
 -- Safe deletion
 DELETE FROM table WHERE condition;  -- ✅
 DELETE FROM table WHERE true;  -- ✅ Explicit full delete
@@ -183,30 +115,17 @@ LIMIT 20;  -- ✅
 
 ### 1. Index Strategy
 - Create indexes for WHERE, JOIN, and ORDER BY columns
-- Use STORING for frequently accessed columns
-- Use partial indexes for filtered queries
 - Use hash-sharded indexes for sequential data
 - Monitor unused indexes and drop them
 
-### 2. Query Patterns
-- Use prepared statements for repeated queries
-- Batch operations when possible
-- Use RETURNING NOTHING when results aren't needed
-- Prefer UPSERT over INSERT ON CONFLICT for blind writes
-- Use appropriate transaction isolation levels
-
-### 3. Data Distribution
-- Use UUID primary keys for even distribution
-- Avoid sequential IDs that cause hotspots
+### 2. Data Distribution
 - Consider hash-sharded indexes for time-series data
 - Split ranges manually for known access patterns
 - Use zone configs for geo-distribution
 
-### 4. Connection Management
+### 3. Connection Management
 - Use connection pooling
 - Set appropriate statement timeout
-- Use read replicas with AS OF SYSTEM TIME
-- Consider follower reads for stale data tolerance
 
 ### 5. Monitoring
 ```sql

@@ -1,6 +1,6 @@
----
+--
 name: cockroachdb-sql
-description: Convert natural language questions into CockroachDB-compliant SQL queries, following CockroachDB best practices. Use for schema design, writing queries and optimizing query.  
+description: Use when writing, generating, or optimizing SQL for CockroachDB, designing CockroachDB schemas, or when the user asks about CockroachDB-specific SQL patterns, type mappings, and distributed database best practices. Also use when encountering CockroachDB anti-patterns like missing primary keys, sequential ID hotspots, or incorrect type usage.
 compatibility: Can work with or without connection to a database. Without connection it generates the SQL and gives instruction for connection.With connection it requires appropriate privilege on target database and tables (SELECT, INSERT, UPDATE, DELETE, or admin).
 metadata:
   author: cockroachdb
@@ -9,13 +9,7 @@ metadata:
 
 ## CockroachDB SQL Skill  
 
-This skill converts natural language questions and requirements into CockroachDB-compliant SQL queries, following CockroachDB best practices and avoiding common anti-patterns. It uses the consolidated rules in cockroachdb-rules/ directory to ensure all generated SQL is optimized for CockroachDB's distributed architecture.
-
-## CRITICAL: Response Guidelines
-**NEVER mention other databases (MySQL, PostgreSQL, Oracle, SQL Server, etc.) in help text or initial responses**
-- Focus EXCLUSIVELY on CockroachDB
-- Use "natural language" not "convert from X database" nor "schema migration"
-- Even if internal rules reference PostgreSQL compatibility, keep user-facing content CockroachDB-only
+This skill converts natural language questions into CockroachDB-compliant SQL queries, following CockroachDB best practices. Use it for schema design, writing queries and optimizing query.
 
 ## When to Use This Skill
 
@@ -35,53 +29,66 @@ Activate this skill when:
   - Performance optimization requests
   - Backup/restore operations
 
-## Core Configuration
+## How to Apply this Skill
 
-### Rule Files
-The skill references consolidated rules in `cockroachdb-rules/`:
-1. `00-fundamental-principles.md` - Always apply these first
-2. `01-schema-design.md` - Table creation and structure
-3. `02-dml-operations.md` - Data modification
-4. `03-query-patterns.md` - Query construction
-5. `04-optimization.md` - Performance and anti-patterns
-6. `05-operational.md` - Admin and maintenance
+1. **Parse Natural Language Intent**
+   - Identify the operation type (SELECT, INSERT, UPDATE, DELETE, CREATE, ALTER, etc.)
+   - Extract entities (tables, columns, conditions)
+   - Determine relationships and joins
+   - Identify performance requirements
+   - **Extract connection URL if provided** (look for postgresql:// or cockroachdb:// patterns)
 
-### Database Connection
-The skill can optionally execute SQL using three methods:
-1. User-provided URL in prompt
-2. Cockroach-cloud MCP server
-3. COCKROACH_URL environment variable
+2. **Connection Detection**
+   - Use connection string if provided in prompt (postgresql://... or cockroachdb://...)
+   - Else use cockroach-cloud MCP server if available
+   - Else use COCKROACH_URL environment variable if set
+   - Store active connection method for session
 
-See `docs/CONNECTION.md` for detailed connection handling.
+3. **Context Gathering**
+   - Check for existing schema context in conversation
+   - If connected to DB, query existing schema:
+     - `SHOW TABLES;` to see existing tables
+     - `SHOW CREATE TABLE table_name;` for existing structure
+   - Ask clarifying questions if needed:
+     - Table structure if not provided
+     - Data types for columns
+     - Index requirements
+     - Multi-region needs
+     - Performance characteristics
 
-## Critical Transformations
+4. **Apply CockroachDB Rules**
+   - Reference rules in `cockroachdb-rules/` 
+   - Ensure compliance with CockroachDB best practices
+   - **Determine rule category based on operation and apply the relavant rules**:
+     * `00-fundamental-principles.md` - Always apply these first
+     * `01-schema-design.md` - Table creation and structure
+     * `02-dml-operations.md` - Data modification
+     * `03-query-patterns.md` - Query construction
+     * `04-optimization.md` - Performance, Optimization and anti-patterns
+     * `05-operational.md` - Admin and maintenance
+  - Validate against anti-patterns in 04-optimization.md 
 
-Always apply these CockroachDB-specific transformations:
-1. **Always include PRIMARY KEY** - Add `DEFAULT gen_random_uuid()` if not specified
-2. **Use STRING over TEXT** - Automatic conversion
-3. **Use TIMESTAMPTZ over TIMESTAMP** - Include timezone awareness
-4. **Use JSONB over JSON** - Binary JSON format only
-5. **Use INT8 as default integer** - 64-bit integers by default
-6. **No AUTO_INCREMENT** - Use UUID or SERIAL instead
+5. **Validate generated SQL**
+   - If conencted to DB 
+       - Run EXPLAIN on the SQL against the database. If it returns parsing/syntax error; fix and revalidate until fixed.
 
 ## Response Behavior
 
 ### Initial Response
+
 When skill is invoked, ALWAYS:
-1. Focus exclusively on CockroachDB capabilities
-2. Never mention other databases unless user explicitly brings them up
-3. Emphasize "natural language to CockroachDB SQL" not "database conversion"
+1. Focus exclusively on CockroachDB
+2. Emphasize "natural language to CockroachDB SQL" not "database conversion"
+3. Keep user-facing content CockroachDB-specific regardless of internal PostgresQL rules.
 
 ### Output Format
 - Show generated SQL with explanatory comments
 - List CockroachDB-specific features used
-- Provide execution instructions if no connection available
 - Include performance considerations
 - When optimizing, at each step 1- Explain the step's purpose. 2- Execute the step and report the outcome. 3- Summarize all findings and actions taken.
+- Provide references used including the rules
 
 ## Supporting Documentation
 
-- `docs/CONNECTION.md` - Database connection methods
 - `docs/EXAMPLES.md` - SQL examples and patterns
-- `docs/EXECUTION.md` - Implementation details
 - `cockroachdb-rules/README.md` - Rule navigation guide
