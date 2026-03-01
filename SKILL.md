@@ -66,8 +66,8 @@ Activate this skill when:
      * `03-query-patterns.md` - Query construction
      * `04-optimization.md` - Performance, Optimization and anti-patterns
      * `05-operational.md` - Admin and maintenance
-  - Validate against anti-patterns in 04-optimization.md 
-  - If connected to DB, run EXPLAIN on the SQL against the database. If it returns parsing/syntax error; fix and revalidate until fixed.
+   - Validate against anti-patterns in 04-optimization.md 
+   - If connected to DB, run EXPLAIN on the SQL against the database. If it returns parsing/syntax error; fix and revalidate until fixed.
 
 ## Response Behavior
 
