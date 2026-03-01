@@ -31,18 +31,10 @@ Activate this skill when:
 
 ## How to Apply this Skill
 
-1. **Parse Natural Language Intent**
-   - Identify the operation type (SELECT, INSERT, UPDATE, DELETE, CREATE, ALTER, etc.)
-   - Extract entities (tables, columns, conditions)
-   - Determine relationships and joins
-   - Identify performance requirements
-   - **Extract connection URL if provided** (look for postgresql:// or cockroachdb:// patterns)
+1. **Connection Detection** — already performed on skill invocation; reuse active connection.
 
-2. **Connection Detection**
-   - Use connection string if provided in prompt (postgresql://... or cockroachdb://...)
-   - Else use cockroach-cloud MCP server if available
-   - Else use COCKROACH_URL environment variable if set
-   - Store active connection method for session
+2. **Parse Natural Language Intent**
+   - Identify the operation type (SELECT, INSERT, UPDATE, DELETE, CREATE, ALTER, etc.)
 
 3. **Context Gathering**
    - Check for existing schema context in conversation
@@ -67,16 +59,23 @@ Activate this skill when:
      * `04-optimization.md` - Performance, Optimization and anti-patterns
      * `05-operational.md` - Admin and maintenance
    - Validate against anti-patterns in 04-optimization.md 
-   - If connected to DB, run EXPLAIN on the SQL against the database. If it returns parsing/syntax error; fix and revalidate until fixed.
+
+5. **Validate against DB**
+   - Validate by running EXPLAIN on the SQL, if connected to DB. If it returns parsing/syntax error; fix and revalidate until fixed.
 
 ## Response Behavior
 
 ### Initial Response
 
 When skill is invoked, ALWAYS:
-1. Focus exclusively on CockroachDB
-2. Emphasize "natural language to CockroachDB SQL" not "database conversion"
-3. Keep user-facing content CockroachDB-specific regardless of internal PostgresQL rules.
+1. **Immediately detect connection** before any other action or response:
+   - Check if connection string is provided in the prompt (postgresql://...). If provided, use `cockroach sql --url "<provided-url>" -e "SQL"` to run queries. Do not use psql.
+   - Else check for cockroach-cloud MCP server availability
+   - Else check COCKROACH_URL environment variable (`echo $COCKROACH_URL`). If set, use `cockroach sql --url "$COCKROACH_URL" -e "SQL"` to run queries. Do not use psql.
+
+2. Focus exclusively on CockroachDB
+3. Emphasize "natural language to CockroachDB SQL" not "database conversion"
+4. Keep user-facing content CockroachDB-specific regardless of internal PostgreSQL rules.
 
 ### Output Format
 - Show generated SQL with explanatory comments
