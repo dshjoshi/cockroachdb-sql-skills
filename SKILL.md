@@ -49,7 +49,7 @@ Activate this skill when:
      - Performance characteristics
 
 4. **Apply CockroachDB Rules**
-   - Reference rules in `cockroachdb-rules/` 
+   - Reference rules in `references/cockroachdb-rules/` 
    - Ensure compliance with CockroachDB best practices
    - **Determine rule category based on operation and apply the relavant rules**:
      * `00-fundamental-principles.md` - Always apply these first
@@ -60,8 +60,10 @@ Activate this skill when:
      * `05-operational.md` - Admin and maintenance
    - Validate against anti-patterns in 04-optimization.md 
 
-5. **Validate against DB**
-   - Validate by running EXPLAIN on the SQL, if connected to DB. If it returns parsing/syntax error; fix and revalidate until fixed.
+5. **Validate against DB(MANDATORY)**
+   - ALWAYS run EXPLAIN on every generated SQL query when connected to DB.
+   - If EXPLAIN returns a parsing/syntax error, fix the query and re-run EXPLAIN until it passes.
+   - Include the EXPLAIN output in the response.
 
 ## Response Behavior
 
@@ -69,9 +71,11 @@ Activate this skill when:
 
 When skill is invoked, ALWAYS:
 1. **Immediately detect connection** before any other action or response:
-   - Check if connection string is provided in the prompt (postgresql://...). If provided, use `cockroach sql --url "<provided-url>" -e "SQL"` to run queries. Do not use psql.
+   - Check if connection string is provided in the prompt (postgresql://...).
+     - If provided, use `cockroach sql --url "<provided-url>" -e "SQL"` to run queries. Do not use psql.
+   - Else check COCKROACH_URL environment variable (`echo $COCKROACH_URL`). 
+     - If set, use `cockroach sql --url $COCKROACH_URL -e "SQL"` to run queries. Do not use psql.
    - Else check for cockroach-cloud MCP server availability
-   - Else check COCKROACH_URL environment variable (`echo $COCKROACH_URL`). If set, use `cockroach sql --url "$COCKROACH_URL" -e "SQL"` to run queries. Do not use psql.
 
 2. Focus exclusively on CockroachDB
 3. Emphasize "natural language to CockroachDB SQL" not "database conversion"
@@ -86,5 +90,5 @@ When skill is invoked, ALWAYS:
 
 ## Supporting Documentation
 
-- `docs/EXAMPLES.md` - SQL examples and patterns
-- `cockroachdb-rules/README.md` - Rule navigation guide
+- `references/cockroachdb-rules/` - CockroachDB SQL rules 
+- `references/EXAMPLES.md` - SQL examples and patterns
