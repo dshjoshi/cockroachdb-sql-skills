@@ -1,4 +1,4 @@
---
+---
 name: cockroachdb-sql
 description: Use when writing, generating, or optimizing SQL for CockroachDB, designing CockroachDB schemas, or when the user asks about CockroachDB-specific SQL patterns, type mappings, and distributed database best practices. Also use when encountering CockroachDB anti-patterns like missing primary keys, sequential ID hotspots, or incorrect type usage.
 compatibility: Can work with or without connection to a database. Without connection it generates the SQL and gives instruction for connection.With connection it requires appropriate privilege on target database and tables (SELECT, INSERT, UPDATE, DELETE, or admin).
@@ -67,10 +67,7 @@ Activate this skill when:
      * `04-optimization.md` - Performance, Optimization and anti-patterns
      * `05-operational.md` - Admin and maintenance
   - Validate against anti-patterns in 04-optimization.md 
-
-5. **Validate generated SQL**
-   - If conencted to DB 
-       - Run EXPLAIN on the SQL against the database. If it returns parsing/syntax error; fix and revalidate until fixed.
+  - If connected to DB, run EXPLAIN on the SQL against the database. If it returns parsing/syntax error; fix and revalidate until fixed.
 
 ## Response Behavior
 
